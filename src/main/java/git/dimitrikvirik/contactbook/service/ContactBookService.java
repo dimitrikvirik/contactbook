@@ -4,10 +4,12 @@ import git.dimitrikvirik.contactbook.exception.ResourceNotFoundException;
 import git.dimitrikvirik.contactbook.model.entity.ContactBookEntity;
 import git.dimitrikvirik.contactbook.model.param.ContactBookSearchParam;
 import git.dimitrikvirik.contactbook.repository.ContactBookRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -26,9 +28,13 @@ public class ContactBookService {
 
     private final MongoTemplate mongoTemplate;
 
+    private final MongoOperations mongoOperations;
+
     public ContactBookEntity save(ContactBookEntity contactBookEntity) {
         return contactBookRepository.save(contactBookEntity);
     }
+
+
 
     public Page<ContactBookEntity> findAll(ContactBookSearchParam searchParam, String ownerUserId, Pageable pageable) {
         //build mongo query

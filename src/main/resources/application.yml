@@ -1,3 +1,4 @@
+
 spring:
   data:
     mongodb:
@@ -8,3 +9,4 @@ spring:
 jwt:
   secret: ${JWT_SECRET:GS1JfaQxVlZROFO82tOIoRmg7p1il57R0ChmGp8sycuVpmABRawFDNgad0kwAQ}
   tokenValidity: ${JWT_TOKEN_VALIDITY:86400}
+
