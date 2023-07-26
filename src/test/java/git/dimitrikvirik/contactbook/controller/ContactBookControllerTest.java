@@ -5,8 +5,6 @@ import git.dimitrikvirik.contactbook.mapper.ContactBookMapper;
 import git.dimitrikvirik.contactbook.model.dto.ContactBookDTO;
 import git.dimitrikvirik.contactbook.model.entity.ContactBookEntity;
 import git.dimitrikvirik.contactbook.model.param.ContactBookParam;
-import git.dimitrikvirik.contactbook.repository.ContactBookRepository;
-import lombok.With;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataM
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -299,6 +294,26 @@ class ContactBookControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(0));
+    }
+
+    @Test
+    @DisplayName("Get all contact books with all search params")
+    @WithMockUser(username = "test", authorities = {"CONTACT_BOOK_READ", "CONTACT_BOOK_WRITE"})
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    void getAllContactBooks_when_success_with_all_search_params() throws Exception {
+        getContactBookEntity("test");
+        getContactBookEntity("test");
+        getContactBookEntity("test2");
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/contact-book?firstname=test&lastname=test&phone=test&address=test&email=test")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].firstname").value("test"));
     }
 
 

@@ -6,6 +6,8 @@ import git.dimitrikvirik.contactbook.model.param.ContactBookParam;
 
 public class ContactBookMapper {
 
+    private ContactBookMapper() {
+    }
     public static ContactBookDTO toDTO(ContactBookEntity entity) {
         return ContactBookDTO.builder()
                 .id(entity.getId())

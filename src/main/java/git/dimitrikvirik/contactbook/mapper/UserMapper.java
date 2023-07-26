@@ -7,6 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserMapper {
 
+    private UserMapper() {
+    }
+
     public static UserEntity toEntity(UserRegParam userParam, PasswordEncoder passwordEncoder) {
         return UserEntity
                 .builder()
