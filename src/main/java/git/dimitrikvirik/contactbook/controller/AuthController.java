@@ -12,9 +12,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Validated
 @Tag(name = "AuthController", description = "The Authentication Controller for handling registration and login requests")
 public class AuthController {
 
@@ -38,7 +41,7 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Server Error")})
     public ResponseEntity<UserDTO> createUser(
             @Parameter(description = "User details for the new user to be created")
-            @RequestBody UserRegParam userDTO) {
+            @RequestBody @Valid UserRegParam userDTO) {
         return new ResponseEntity<>(userFacade.createUser(userDTO), HttpStatus.CREATED);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
@@ -29,7 +30,7 @@ public class ContactBookService {
         return contactBookRepository.save(contactBookEntity);
     }
 
-    public Page<ContactBookEntity> findAll(ContactBookSearchParam searchParam, Pageable pageable) {
+    public Page<ContactBookEntity> findAll(ContactBookSearchParam searchParam, String ownerUserId, Pageable pageable) {
         //build mongo query
         StringBuilder sb = new StringBuilder();
         if (StringUtils.hasText(searchParam.firstname())) {
@@ -49,11 +50,11 @@ public class ContactBookService {
         if (sb.length() != 0) {
             TextCriteria criteria = TextCriteria.forDefaultLanguage().caseSensitive(false).matching(sb.toString());
             Query query = TextQuery.queryText(criteria).sortByScore().with(pageable);
+            query.addCriteria(Criteria.where("ownerUserId").is(ownerUserId));
             long count = mongoTemplate.count(query, ContactBookEntity.class);
             return new PageImpl<>(mongoTemplate.find(query, ContactBookEntity.class), pageable, count);
-
         }
-        return contactBookRepository.findAll(pageable);
+        return contactBookRepository.findAllByOwnerUserId(ownerUserId, pageable);
     }
 
     public ContactBookEntity findById(String id) {

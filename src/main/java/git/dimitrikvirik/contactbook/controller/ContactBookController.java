@@ -115,7 +115,9 @@ public class ContactBookController {
             ContactBookSearchParam searchParam,
             @Parameter(hidden = true)
             @PageableDefault
-            Pageable pageable) {
-        return new ResponseEntity<>(contactBookFacade.getAllContactBooks(searchParam, pageable), HttpStatus.OK);
+            Pageable pageable,
+            @Parameter(hidden = true)
+            Principal principal) {
+        return new ResponseEntity<>(contactBookFacade.getAllContactBooks(searchParam, principal, pageable), HttpStatus.OK);
     }
 }

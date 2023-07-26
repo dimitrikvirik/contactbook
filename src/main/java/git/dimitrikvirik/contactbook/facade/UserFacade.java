@@ -41,7 +41,7 @@ public class UserFacade {
     }
 
     public TokenDTO login(UserLoginParam userLoginParam) {
-        UserEntity userEntity = userService.findByUsername(userLoginParam.username());
+        UserEntity userEntity = userService.findByUsername(userLoginParam.username()).orElseThrow(WrongCredentialException::new);
         if (!passwordEncoder.matches(userLoginParam.password(), userEntity.getPassword())) {
             throw new WrongCredentialException();
         }

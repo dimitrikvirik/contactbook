@@ -50,7 +50,7 @@ public class ContactBookFacade {
         return contactBook;
     }
 
-    public Page<ContactBookDTO> getAllContactBooks(ContactBookSearchParam searchParam, Pageable pageable) {
-        return contactBookService.findAll(searchParam, pageable).map(ContactBookMapper::toDTO);
+    public Page<ContactBookDTO> getAllContactBooks(ContactBookSearchParam searchParam, Principal principal, Pageable pageable) {
+        return contactBookService.findAll(searchParam, principal.getName(), pageable).map(ContactBookMapper::toDTO);
     }
 }
