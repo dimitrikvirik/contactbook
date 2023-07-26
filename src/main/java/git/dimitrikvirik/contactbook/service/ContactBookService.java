@@ -28,7 +28,7 @@ public class ContactBookService {
 
     private final MongoTemplate mongoTemplate;
 
-    private final MongoOperations mongoOperations;
+
 
     public ContactBookEntity save(ContactBookEntity contactBookEntity) {
         return contactBookRepository.save(contactBookEntity);
